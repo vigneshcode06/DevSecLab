@@ -1,0 +1,9 @@
+version: '3'
+services:
+  vigneshlab:
+    build: .
+    container_name: vigneshlab
+    ports:
+      - "2222:22"      # SSH
+      - "8080:8080"    # Code Server
+    restart: unless-stopped
