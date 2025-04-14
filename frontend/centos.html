@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vlab - CentOS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1b2a] text-white font-sans">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-[#1b263b] p-5 fixed h-full">
+    <h1 class="text-2xl font-bold mb-8 text-orange-400">Vlab</h1>
+    <nav class="space-y-4 text-sm">
+      <a href="ubuntu.html" class="block hover:text-orange-300">Ubuntu</a>
+      <a href="centos.html" class="block text-orange-300">CentOS</a>
+      <a href="alpine.html" class="block hover:text-orange-300">Alpine</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="ml-64 p-6">
+    <header class="flex justify-between items-center border-b border-gray-600 pb-4">
+      <div class="text-sm text-gray-400">
+        Home / Labs / <span class="text-white">CentOS</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-white text-sm">Ninja Recruit I</span>
+        <img src="https://ui-avatars.com/api/?name=Ninja" alt="Avatar" class="w-8 h-8 rounded-full border-2 border-orange-400" />
+      </div>
+    </header>
+
+    <main class="mt-6">
+      <h2 class="text-2xl font-bold text-orange-400">CentOS Lab</h2>
+      <p class="text-sm text-gray-400">Lab ID: <span class="text-cyan-400 underline">centos</span></p>
+      <p class="text-xs mt-1 text-gray-500">Classic CentOS environment for server administration, hosting apps, or learning Linux the traditional way.</p>
+
+      <!-- Deploy / Stop Button -->
+      <div class="mt-4">
+        <button id="centos-lab-button" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full shadow flex items-center gap-2" onclick="handleLabToggle('centos')">
+          <span id="centos-button-text">Deploy 🚀</span>
+          <svg id="centos-spinner" class="w-5 h-5 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l4-4-4-4v4a8 8 0 100 16v-4l-4 4 4 4v-4a8 8 0 01-8-8z"></path>
+          </svg>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let centosLabRunning = false;
+
+    function handleLabToggle(lab) {
+      const btn = document.getElementById(`${lab}-lab-button`);
+      const spinner = document.getElementById(`${lab}-spinner`);
+      const text = document.getElementById(`${lab}-button-text`);
+
+      spinner.classList.remove("hidden");
+      btn.disabled = true;
+
+      const basePath = "C:\\path\\to\\docker\\compose\\files"; // Replace with actual path
+      let command = `cd ${basePath} && docker-compose -f ${lab}.yml up -d`;
+      let buttonText = "Stop Lab 🛑";
+      let buttonClass = "bg-red-600 hover:bg-red-700";
+
+      if (centosLabRunning) {
+        command = `cd ${basePath} && docker-compose -f ${lab}.yml down`;
+        buttonText = "Deploy 🚀";
+        buttonClass = "bg-green-600 hover:bg-green-700";
+      }
+
+      fetch("/execute-command", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ command: command })
+      })
+      .then(response => response.json())
+      .then(data => {
+        centosLabRunning = !centosLabRunning;
+        text.textContent = buttonText;
+        btn.className = `${buttonClass} text-white px-5 py-2 rounded-full shadow flex items-center gap-2`;
+      })
+      .catch(err => {
+        console.error("Error executing command:", err);
+      })
+      .finally(() => {
+        spinner.classList.add("hidden");
+        btn.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>
