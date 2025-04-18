@@ -156,13 +156,13 @@
       btn.disabled = true;
 
       // Customize path to your docker-compose directory
-      const basePath = "C:\\Users\\Admin\\Music\\code\\project lab\\docker-ssh-vscode\\docker"; // Replace with your real path
-      let command = `cd ${basePath} && docker-compose start`;
+      const basePath = "C:\\Users\\Admin\\Music\\code\\project lab\\docker-ssh-vscode\\docker\\ubuntu"; // Replace with your real path
+      let command = `cd ${basePath} && python3 missionstart.py`;
       let buttonText = "Stop Lab 🛑";
       let buttonClass = "bg-red-600 hover:bg-red-700";
 
       if (labRunning) {
-        command = `cd ${basePath} && docker-compose stop`;
+        command = `cd ${basePath} && python3 stopmission.py`;
         buttonText = "Deploy 🚀";
         buttonClass = "bg-green-600 hover:bg-green-700";
       }

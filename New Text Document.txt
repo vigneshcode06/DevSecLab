@@ -1,2 +1,17 @@
 ssh vignesh@localhost -p 2222
 # password: admin123
+
+
+✅ Access After Starting
+🔓 SSH to localhost:2222
+Username: vignesh
+Password: admin123
+
+💻 Open browser → http://localhost:8080
+Code Server login: vscode123
+
+🗂️ Your persistent files live in:
+
+Inside container: /home/vignesh/mission
+
+On your system: ./mission_files

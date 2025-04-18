@@ -10,9 +10,9 @@ RUN apt-get update && \
     echo 'vignesh ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Install and configure SSH
-RUN mkdir /var/run/sshd
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN echo 'root:admin123' | chpasswd
+RUN mkdir /var/run/sshd && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    echo 'root:admin123' | chpasswd
 
 # Install Code Server
 RUN curl -fsSL https://code-server.dev/install.sh | sh

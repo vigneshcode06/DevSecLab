@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Serve the HTML file from the new path
 app.get('/', (req, res) => {
-    res.sendFile(path.join('C:/Users/Admin/Music/code/project lab/docker-ssh-vscode/frontend', 'index.html')); // Update the path
+    res.sendFile(path.join('C:/Users/Admin/Music/code/project lab/docker-ssh-vscode/frontend', 'ubuntu.html')); // Update the path
 });
 
 // Handle the POST request to execute commands
