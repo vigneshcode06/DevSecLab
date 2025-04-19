@@ -78,7 +78,20 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="bg-[#1b263b] p-4 rounded-xl shadow border border-gray-700">
             <h3 class="text-lg font-semibold mb-2 text-orange-300">Lab Information</h3>
-            <p class="text-sm text-red-400">Lab is not active and running.</p>
+            <div id="lab-info" class="space-y-2 text-sm text-gray-300">
+              <p class="text-red-400" id="lab-status-msg">Lab is not active and running.</p>
+              <div id="lab-details" class="hidden space-y-1">
+                <p>✅ <strong>Access After Starting</strong></p>
+                <p>🔓 SSH to <code>localhost:2222</code></p>
+                <p>Username: <code>vignesh</code></p>
+                <p>Password: <code>admin123</code></p>
+                <p>💻 Open browser → <a href="http://localhost:8080" target="_blank" class="text-blue-400 underline">http://localhost:8080</a></p>
+                <p>Code Server login: <code>vscode123</code></p>
+                <p>🗂️ Inside container: <code>/home/vignesh/mission</code></p>
+                <p>🗂️ On your system: <code>./mission_files</code></p>
+              </div>
+            </div>
+            
           </div>
 
           <div class="bg-[#1b263b] p-4 rounded-xl shadow border border-gray-700">
@@ -214,5 +227,45 @@
       terminal.scrollTop = terminal.scrollHeight;
     }
   </script>
+
+
+  <script>
+    function updateLabInfo(isRunning) {
+      const statusMsg = document.getElementById("lab-status-msg");
+      const details = document.getElementById("lab-details");
+  
+      if (isRunning) {
+        statusMsg.classList.remove("text-red-400");
+        statusMsg.classList.add("text-green-400");
+        statusMsg.textContent = "Lab is active and running.";
+        details.classList.remove("hidden");
+      } else {
+        statusMsg.classList.add("text-red-400");
+        statusMsg.classList.remove("text-green-400");
+        statusMsg.textContent = "Lab is not active and running.";
+        details.classList.add("hidden");
+      }
+    }
+  
+    // Call from your .then() in handleLabToggle()
+    // Add inside .then(...) after response:
+    updateLabInfo(!labRunning ? true : false);
+  
+    // LOAD AVERAGE POLLING
+    function updateLoadAvg() {
+      fetch("/loadavg")
+        .then(res => res.json())
+        .then(data => {
+          document.querySelectorAll(".grid .text-white")[0].textContent = data.one;
+          document.querySelectorAll(".grid .text-white")[1].textContent = data.five;
+          document.querySelectorAll(".grid .text-white")[2].textContent = data.fifteen;
+        })
+        .catch(console.error);
+    }
+  
+    setInterval(updateLoadAvg, 5000); // Every 5 seconds
+    updateLoadAvg(); // Run once at load
+  </script>
+  
 </body>
 </html>
