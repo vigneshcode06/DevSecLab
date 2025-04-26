@@ -2,7 +2,7 @@ FROM kalilinux/kali-rolling
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Create user kali and set password
+# Create user 'kali' and set password
 RUN apt-get update && \
     apt-get install -y openssh-server curl sudo && \
     useradd -m -s /bin/bash kali && \
@@ -10,14 +10,14 @@ RUN apt-get update && \
     echo 'kali ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Install and configure SSH
-RUN mkdir /var/run/sshd && \
+RUN mkdir -p /var/run/sshd && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     echo 'root:admin123' | chpasswd
 
 # Install Code Server
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
-# Setup Code Server for user kali
+# Setup Code Server for user 'kali'
 RUN mkdir -p /home/kali/.config/code-server && \
     echo 'bind-addr: 0.0.0.0:8080' > /home/kali/.config/code-server/config.yaml && \
     echo 'auth: password' >> /home/kali/.config/code-server/config.yaml && \

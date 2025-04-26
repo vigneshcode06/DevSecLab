@@ -1,0 +1,47 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Set the base directory
+RewriteBase /
+
+# Redirect to 404 page for non-existent files or directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ 404.php [L]
+
+# Custom 404 error page
+ErrorDocument 404 /404.php
+
+# Prevent directory listings
+Options -Indexes
+
+# Secure sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(sql|txt|log|ini)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Allow access to sql.txt for this specific project
+<Files "sql.txt">
+    Order allow,deny
+    Allow from all
+</Files>
+
+# PHP settings
+php_flag display_errors Off
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value max_execution_time 300
+php_value max_input_time 300
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>

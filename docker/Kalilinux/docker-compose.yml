@@ -5,9 +5,9 @@ services:
     build: .
     container_name: kalilab
     ports:
-      - "2223:22"      # SSH Port for Kali
-      - "8081:8080"    # Code Server for Kali
+      - "2223:22"      # SSH (Kali) – avoids conflict with Ubuntu's 2222
+      - "8081:8080"    # Code Server (Kali) – avoids conflict with Ubuntu's 8080
     volumes:
-      - ./mission_files:/home/kali/mission
+      - ./mission_files:/home/kali/mission   # Persisted folder for mission data
     restart: unless-stopped
     tty: true
