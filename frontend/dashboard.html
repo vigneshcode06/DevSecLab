@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VLab - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1><span class="logo-v">V</span>LAB</h1>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <h3 id="userDisplayName">User</h3>
+                    <p>Cybersecurity Student</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="labs.html">
+                            <i class="fas fa-flask"></i>
+                            <span>Labs</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-book"></i>
+                            <span>Learning</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-trophy"></i>
+                            <span>Achievements</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h2>Dashboard</h2>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="notification">
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <div class="welcome-banner">
+                    <div class="welcome-text">
+                        <h3>Welcome back, <span id="welcomeUserName">User</span>!</h3>
+                        <p>Continue your cybersecurity training journey</p>
+                    </div>
+                    <div class="welcome-actions">
+                        <a href="labs.html" class="btn-primary">Start Lab <i class="fas fa-play"></i></a>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Labs Completed</h4>
+                            <p>5 / 24</p>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 20%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>CTF Points</h4>
+                            <p>1250</p>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Level</h4>
+                            <p>Intermediate</p>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-bar" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-panels">
+                    <div class="panel panel-labs">
+                        <div class="panel-header">
+                            <h3>Recent Labs</h3>
+                            <a href="labs.html" class="panel-link">View All <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="panel-body">
+                            <div class="lab-list">
+                                <div class="lab-item">
+                                    <div class="lab-icon"><i class="fas fa-code"></i></div>
+                                    <div class="lab-details">
+                                        <h4>Web Application Security</h4>
+                                        <p>In progress</p>
+                                    </div>
+                                    <div class="lab-actions">
+                                        <button class="btn-resume">Resume</button>
+                                    </div>
+                                </div>
+                                <div class="lab-item">
+                                    <div class="lab-icon"><i class="fas fa-network-wired"></i></div>
+                                    <div class="lab-details">
+                                        <h4>Network Penetration Testing</h4>
+                                        <p>Completed</p>
+                                    </div>
+                                    <div class="lab-actions">
+                                        <button class="btn-review">Review</button>
+                                    </div>
+                                </div>
+                                <div class="lab-item">
+                                    <div class="lab-icon"><i class="fas fa-shield-alt"></i></div>
+                                    <div class="lab-details">
+                                        <h4>Secure Coding Practices</h4>
+                                        <p>Not started</p>
+                                    </div>
+                                    <div class="lab-actions">
+                                        <button class="btn-start">Start</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-achievements">
+                        <div class="panel-header">
+                            <h3>Recent Achievements</h3>
+                            <a href="#" class="panel-link">View All <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="panel-body">
+                            <div class="achievement-list">
+                                <div class="achievement-item">
+                                    <div class="achievement-icon"><i class="fas fa-bug"></i></div>
+                                    <div class="achievement-details">
+                                        <h4>Bug Hunter</h4>
+                                        <p>Found your first vulnerability</p>
+                                    </div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon"><i class="fas fa-lock"></i></div>
+                                    <div class="achievement-details">
+                                        <h4>Crypto Master</h4>
+                                        <p>Solved 3 cryptography challenges</p>
+                                    </div>
+                                </div>
+                                <div class="achievement-item">
+                                    <div class="achievement-icon"><i class="fas fa-terminal"></i></div>
+                                    <div class="achievement-details">
+                                        <h4>Command Line Wizard</h4>
+                                        <p>Completed the Linux essentials lab</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
