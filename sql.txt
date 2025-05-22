@@ -1,0 +1,120 @@
+-- Create database
+CREATE DATABASE IF NOT EXISTS vlab_db;
+USE vlab_db;
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL, -- Store hashed passwords
+    fullname VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    bio TEXT,
+    country VARCHAR(50),
+    timezone VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create user_settings table
+CREATE TABLE IF NOT EXISTS user_settings (
+    setting_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    email_notifications BOOLEAN DEFAULT TRUE,
+    lab_reminders BOOLEAN DEFAULT TRUE,
+    new_lab_alerts BOOLEAN DEFAULT TRUE,
+    security_alerts BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- Create labs table
+CREATE TABLE IF NOT EXISTS labs (
+    lab_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    category VARCHAR(50) NOT NULL, -- e.g., Development, CTF, Windows
+    difficulty VARCHAR(20) NOT NULL, -- Beginner, Intermediate, Advanced, Expert
+    duration INT, -- Duration in minutes
+    icon VARCHAR(50), -- Font Awesome icon class
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create user_lab_progress table to track user progress in labs
+CREATE TABLE IF NOT EXISTS user_lab_progress (
+    progress_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    lab_id INT NOT NULL,
+    status VARCHAR(20) NOT NULL, -- Not Started, In Progress, Completed
+    progress_percentage INT DEFAULT 0,
+    completed_at TIMESTAMP NULL,
+    last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (lab_id) REFERENCES labs(lab_id) ON DELETE CASCADE,
+    UNIQUE KEY (user_id, lab_id)
+);
+
+-- Create achievements table
+CREATE TABLE IF NOT EXISTS achievements (
+    achievement_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    icon VARCHAR(50), -- Font Awesome icon class
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create user_achievements table to track user achievements
+CREATE TABLE IF NOT EXISTS user_achievements (
+    user_achievement_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    achievement_id INT NOT NULL,
+    achieved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (achievement_id) REFERENCES achievements(achievement_id) ON DELETE CASCADE,
+    UNIQUE KEY (user_id, achievement_id)
+);
+
+-- Insert demo achievements
+INSERT INTO achievements (title, description, icon) VALUES
+('First Blood', 'Complete your first lab', 'fa-flag-checkered'),
+('Bug Hunter', 'Find your first vulnerability', 'fa-bug'),
+('Crypto Master', 'Solve 3 cryptography challenges', 'fa-lock'),
+('Command Line Wizard', 'Complete the Linux essentials lab', 'fa-terminal'),
+('Defender', 'Successfully prevent 5 attacks', 'fa-shield-alt'),
+('CTF Champion', 'Win a CTF competition', 'fa-trophy');
+
+-- Insert demo labs
+INSERT INTO labs (title, description, category, difficulty, duration, icon) VALUES
+('Secure Coding Practices', 'Learn how to write secure code and avoid common vulnerabilities in web applications', 'Development', 'Beginner', 120, 'fa-code'),
+('Vulnerability Assessment', 'Identify and assess security vulnerabilities in a sample web application', 'Development', 'Intermediate', 180, 'fa-shield-alt'),
+('Secure API Development', 'Build and secure REST APIs using modern authentication and authorization methods', 'Development', 'Advanced', 240, 'fa-database'),
+('Web Exploitation Basics', 'Learn the basics of web exploitation techniques in a CTF-style environment', 'CTF', 'Beginner', 60, 'fa-flag'),
+('Cryptography Challenges', 'Solve various cryptography challenges and decrypt hidden messages', 'CTF', 'Intermediate', 120, 'fa-key'),
+('Advanced Exploitation', 'Test your skills with complex exploitation challenges in a realistic environment', 'CTF', 'Expert', 300, 'fa-bug'),
+('Windows Security Fundamentals', 'Learn essential Windows security concepts and hardening techniques', 'Windows', 'Beginner', 120, 'fa-windows'),
+('Active Directory Security', 'Explore security aspects of Windows Active Directory environments', 'Windows', 'Intermediate', 180, 'fa-network-wired'),
+('Windows Privilege Escalation', 'Learn techniques for privilege escalation in Windows systems', 'Windows', 'Advanced', 240, 'fa-arrow-up');
+
+-- Create a demo admin user (password: Admin@123)
+-- Note: In a real application, the password would be hashed
+INSERT INTO users (username, password, fullname, email, country, timezone)
+VALUES ('admin', '$2y$10$8KzO1fSx6Ec8jJ0DoOrRBe2UGP0Xd0UU/X4FLKrXPUnS4sSTV5NYi', 'Admin User', 'admin@vlab.com', 'us', 'est');
+
+-- Insert admin user settings
+INSERT INTO user_settings (user_id, email_notifications, lab_reminders, new_lab_alerts, security_alerts)
+VALUES (1, TRUE, TRUE, TRUE, TRUE);
+
+-- Give admin user all achievements (for demo purposes)
+INSERT INTO user_achievements (user_id, achievement_id)
+VALUES 
+(1, 1), -- First Blood
+(1, 2), -- Bug Hunter
+(1, 3); -- Crypto Master
+
+-- Set admin progress on some labs
+INSERT INTO user_lab_progress (user_id, lab_id, status, progress_percentage)
+VALUES 
+(1, 1, 'Completed', 100), -- Secure Coding Practices
+(1, 2, 'In Progress', 45), -- Vulnerability Assessment
+(1, 4, 'Completed', 100), -- Web Exploitation Basics
+(1, 5, 'In Progress', 75), -- Cryptography Challenges
+(1, 7, 'Completed', 100); -- Windows Security Fundamentals
