@@ -1,3 +1,10 @@
+<?php
+// Include authentication functions
+require_once 'includes/auth.php';
+
+// Check if user is logged in
+$is_logged_in = is_logged_in();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,8 +26,11 @@
             <h1 class="error-title">System Breach</h1>
             <p class="error-message">The page you are looking for does not exist or has been moved to another dimension.</p>
             <div class="error-actions">
-                <a href="dashboard.html" class="btn-primary"><i class="fas fa-home"></i> Back to Dashboard</a>
-                <a href="index.html" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <?php if ($is_logged_in): ?>
+                    <a href="dashboard.php" class="btn-primary"><i class="fas fa-home"></i> Back to Dashboard</a>
+                <?php else: ?>
+                    <a href="index.php" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <?php endif; ?>
             </div>
         </div>
         <div class="error-animation">
@@ -37,6 +47,19 @@
         <div class="grid-line vertical"></div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add glitch effect animation
+        const glitchElement = document.querySelector('.glitch-effect');
+        
+        setInterval(function() {
+            glitchElement.classList.add('active');
+            
+            setTimeout(function() {
+                glitchElement.classList.remove('active');
+            }, 200);
+        }, 3000);
+    });
+    </script>
 </body>
 </html>

@@ -1,3 +1,32 @@
+<?php
+// Include authentication and labs functions
+require_once 'includes/auth.php';
+require_once 'includes/labs.php';
+
+// Check if user is logged in
+if (!is_logged_in()) {
+    redirect('index.php');
+}
+
+// Get user data
+$user_id = $_SESSION['user_id'];
+$username = $_SESSION['username'];
+$fullname = $_SESSION['fullname'];
+
+// Get user progress summary
+$progress_summary = get_user_progress_summary($user_id);
+
+// Get recent labs (limit to 3)
+$recent_labs = get_user_labs($user_id);
+$recent_labs = array_slice($recent_labs, 0, 3);
+
+// Get user achievements (limit to 3)
+$achievements = get_user_achievements($user_id);
+$recent_achievements = array_filter($achievements, function($achievement) {
+    return $achievement['unlocked'] == 1;
+});
+$recent_achievements = array_slice($recent_achievements, 0, 3);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,20 +52,20 @@
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="user-info">
-                    <h3 id="userDisplayName">User</h3>
+                    <h3 id="userDisplayName"><?php echo htmlspecialchars($username); ?></h3>
                     <p>Cybersecurity Student</p>
                 </div>
             </div>
             <nav class="sidebar-nav">
                 <ul>
                     <li class="active">
-                        <a href="dashboard.html">
+                        <a href="dashboard.php">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="labs.html">
+                        <a href="labs.php">
                             <i class="fas fa-flask"></i>
                             <span>Labs</span>
                         </a>
@@ -54,7 +83,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="profile.html">
+                        <a href="profile.php">
                             <i class="fas fa-user"></i>
                             <span>Profile</span>
                         </a>
@@ -68,7 +97,7 @@
                 </ul>
             </nav>
             <div class="sidebar-footer">
-                <a href="#" id="logoutBtn">
+                <a href="logout.php" id="logoutBtn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -96,11 +125,11 @@
             <div class="content-body">
                 <div class="welcome-banner">
                     <div class="welcome-text">
-                        <h3>Welcome back, <span id="welcomeUserName">User</span>!</h3>
+                        <h3>Welcome back, <span id="welcomeUserName"><?php echo htmlspecialchars($fullname); ?></span>!</h3>
                         <p>Continue your cybersecurity training journey</p>
                     </div>
                     <div class="welcome-actions">
-                        <a href="labs.html" class="btn-primary">Start Lab <i class="fas fa-play"></i></a>
+                        <a href="labs.php" class="btn-primary">Start Lab <i class="fas fa-play"></i></a>
                     </div>
                 </div>
 
@@ -111,10 +140,10 @@
                         </div>
                         <div class="stat-info">
                             <h4>Labs Completed</h4>
-                            <p>5 / 24</p>
+                            <p><?php echo $progress_summary['completed_labs']; ?> / <?php echo $progress_summary['total_labs']; ?></p>
                         </div>
                         <div class="stat-progress">
-                            <div class="progress-bar" style="width: 20%"></div>
+                            <div class="progress-bar" style="width: <?php echo $progress_summary['completion_percentage']; ?>%"></div>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -147,40 +176,34 @@
                     <div class="panel panel-labs">
                         <div class="panel-header">
                             <h3>Recent Labs</h3>
-                            <a href="labs.html" class="panel-link">View All <i class="fas fa-arrow-right"></i></a>
+                            <a href="labs.php" class="panel-link">View All <i class="fas fa-arrow-right"></i></a>
                         </div>
                         <div class="panel-body">
                             <div class="lab-list">
-                                <div class="lab-item">
-                                    <div class="lab-icon"><i class="fas fa-code"></i></div>
-                                    <div class="lab-details">
-                                        <h4>Web Application Security</h4>
-                                        <p>In progress</p>
+                                <?php if (empty($recent_labs)): ?>
+                                    <div class="empty-state">
+                                        <p>No labs activity yet. Start your first lab!</p>
                                     </div>
-                                    <div class="lab-actions">
-                                        <button class="btn-resume">Resume</button>
-                                    </div>
-                                </div>
-                                <div class="lab-item">
-                                    <div class="lab-icon"><i class="fas fa-network-wired"></i></div>
-                                    <div class="lab-details">
-                                        <h4>Network Penetration Testing</h4>
-                                        <p>Completed</p>
-                                    </div>
-                                    <div class="lab-actions">
-                                        <button class="btn-review">Review</button>
-                                    </div>
-                                </div>
-                                <div class="lab-item">
-                                    <div class="lab-icon"><i class="fas fa-shield-alt"></i></div>
-                                    <div class="lab-details">
-                                        <h4>Secure Coding Practices</h4>
-                                        <p>Not started</p>
-                                    </div>
-                                    <div class="lab-actions">
-                                        <button class="btn-start">Start</button>
-                                    </div>
-                                </div>
+                                <?php else: ?>
+                                    <?php foreach ($recent_labs as $lab): ?>
+                                        <div class="lab-item">
+                                            <div class="lab-icon"><i class="<?php echo htmlspecialchars($lab['icon']); ?>"></i></div>
+                                            <div class="lab-details">
+                                                <h4><?php echo htmlspecialchars($lab['title']); ?></h4>
+                                                <p><?php echo htmlspecialchars($lab['status']); ?></p>
+                                            </div>
+                                            <div class="lab-actions">
+                                                <?php if ($lab['status'] == 'In Progress'): ?>
+                                                    <button class="btn-resume">Resume</button>
+                                                <?php elseif ($lab['status'] == 'Completed'): ?>
+                                                    <button class="btn-review">Review</button>
+                                                <?php else: ?>
+                                                    <button class="btn-start">Start</button>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -191,27 +214,21 @@
                         </div>
                         <div class="panel-body">
                             <div class="achievement-list">
-                                <div class="achievement-item">
-                                    <div class="achievement-icon"><i class="fas fa-bug"></i></div>
-                                    <div class="achievement-details">
-                                        <h4>Bug Hunter</h4>
-                                        <p>Found your first vulnerability</p>
+                                <?php if (empty($recent_achievements)): ?>
+                                    <div class="empty-state">
+                                        <p>No achievements unlocked yet. Complete labs to earn achievements!</p>
                                     </div>
-                                </div>
-                                <div class="achievement-item">
-                                    <div class="achievement-icon"><i class="fas fa-lock"></i></div>
-                                    <div class="achievement-details">
-                                        <h4>Crypto Master</h4>
-                                        <p>Solved 3 cryptography challenges</p>
-                                    </div>
-                                </div>
-                                <div class="achievement-item">
-                                    <div class="achievement-icon"><i class="fas fa-terminal"></i></div>
-                                    <div class="achievement-details">
-                                        <h4>Command Line Wizard</h4>
-                                        <p>Completed the Linux essentials lab</p>
-                                    </div>
-                                </div>
+                                <?php else: ?>
+                                    <?php foreach ($recent_achievements as $achievement): ?>
+                                        <div class="achievement-item">
+                                            <div class="achievement-icon"><i class="<?php echo htmlspecialchars($achievement['icon']); ?>"></i></div>
+                                            <div class="achievement-details">
+                                                <h4><?php echo htmlspecialchars($achievement['title']); ?></h4>
+                                                <p><?php echo htmlspecialchars($achievement['description']); ?></p>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -220,6 +237,17 @@
         </main>
     </div>
 
-    <script src="js/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle sidebar functionality
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.classList.toggle('expanded');
+            });
+        }
+    });
+    </script>
 </body>
 </html>
