@@ -105,7 +105,7 @@ Example:
 bash
 Copy
 Edit
-ssh -L 3306:mysql.selfmade.ninja:3306 user@lab.server.com
+ssh -L 3306:mysql.127.0.0.1:3306 user@lab.server.com
 Now access localhost:3306 for MySQL from your system.
 
 ```
