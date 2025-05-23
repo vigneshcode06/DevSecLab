@@ -136,7 +136,7 @@ Pull requests are welcome! If you'd like to add new services, improve the UI, or
 
 🧑‍💻 Author
 Built with 💙 by Vignesh
-GitHub: @yourusername
+GitHub: @vigneshcode06
 
 📜 License
 MIT License. Free to use and modify.
