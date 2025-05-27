@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vlab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0d1b2a] text-white font-sans">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#1b263b] p-5 flex flex-col justify-between">
+      <div>
+        <h1 class="text-2xl font-bold mb-8 text-orange-400">Vlab</h1>
+        <nav class="space-y-4 text-sm">
+          <a href="#" class="block hover:text-orange-300">📊 Dashboard</a>
+          <a href="#" class="block hover:text-orange-300">🎟️ Events</a>
+          <a href="#" class="block hover:text-orange-300">⚡ Spot Quiz</a>
+          <a href="#" class="block hover:text-orange-300">💻 Code Arena</a>
+          <hr class="my-4 border-gray-600" />
+          <a href="#" class="block hover:text-orange-300">🌐 Connectivity</a>
+          <a href="#" class="block hover:text-orange-300">🧪 My Labs</a>
+          <a href="#" class="block hover:text-orange-300">🛠️ Services</a>
+          <a href="#" class="block hover:text-orange-300">🏰 Clan Hall</a>
+          <a href="#" class="block hover:text-orange-300">🏆 Mastery Hall</a>
+        </nav>
+      </div>
+      <div class="text-xs text-gray-400 mt-6">
+        <p>CPU Usage: <span class="text-white">12.75%</span></p>
+        <p>Memory: <span class="text-white">40.04 GiB / 77.62 GiB</span></p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+      <!-- Topbar -->
+      <header class="flex items-center justify-between bg-[#1b263b] p-4 border-b border-gray-600">
+        <div class="text-sm text-gray-400">
+          Home / <span class="text-white">Labs</span> / <span class="text-white">Dashboard</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-white text-sm">Ninja Recruit I</span>
+          <img src="https://ui-avatars.com/api/?name=Ninja" alt="Avatar" class="w-8 h-8 rounded-full border-2 border-orange-400" />
+        </div>
+      </header>
+
+      <!-- Dashboard -->
+      <main class="p-6 space-y-6">
+        <!-- Lab Info Header -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-orange-400">Essentials Lab</h2>
+            <p class="text-sm text-gray-400">Lab ID: <span class="text-cyan-400 underline">essentials</span></p>
+            <p class="text-xs mt-1 text-gray-500">Ubuntu 24.04 lab packed with all the essentials to code, host, build and develop with root access.</p>
+          </div>
+
+          <!-- Deploy / Stop Button -->
+          <div id="lab-control">
+            <button id="lab-button" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full shadow flex items-center gap-2" onclick="handleLabToggle()">
+              <span id="button-text">Deploy 🚀</span>
+              <svg id="spinner" class="w-5 h-5 animate-spin hidden" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l4-4-4-4v4a8 8 0 100 16v-4l-4 4 4 4v-4a8 8 0 01-8-8z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- Tabs -->
+        <div class="flex space-x-4 border-b border-gray-700">
+          <button class="px-4 py-2 text-orange-300 border-b-2 border-orange-300">Dashboard</button>
+          <button class="px-4 py-2 text-gray-400 hover:text-orange-200">Domains</button>
+          <button class="px-4 py-2 text-gray-400 hover:text-orange-200">Preferences</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-[#1b263b] p-4 rounded-xl shadow border border-gray-700">
+            <h3 class="text-lg font-semibold mb-2 text-orange-300">Lab Information</h3>
+            <div id="lab-info" class="space-y-2 text-sm text-gray-300">
+              <p class="text-red-400" id="lab-status-msg">Lab is not active and running.</p>
+              <div id="lab-details" class="hidden space-y-1">
+                <p>✅ <strong>Access After Starting</strong></p>
+                <p>🔓 SSH to <code>localhost:2222</code></p>
+                <p>Username: <code>vignesh</code></p>
+                <p>Password: <code>admin123</code></p>
+                <p>💻 Open browser → <a href="http://localhost:8080" target="_blank" class="text-blue-400 underline">http://localhost:8080</a></p>
+                <p>Code Server login: <code>vscode123</code></p>
+                <p>🗂️ Inside container: <code>/home/vignesh/mission</code></p>
+                <p>🗂️ On your system: <code>./mission_files</code></p>
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="bg-[#1b263b] p-4 rounded-xl shadow border border-gray-700">
+            <h3 class="text-lg font-semibold mb-2 text-orange-300">Container Load <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded">Live</span></h3>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p class="text-gray-400">CPU Load</p>
+                <div class="h-2 bg-gray-700 rounded-full overflow-hidden mt-1">
+                  <div class="w-1/4 bg-orange-400 h-full"></div>
+                </div>
+              </div>
+              <div>
+                <p class="text-gray-400">Memory Usage</p>
+                <div class="h-2 bg-gray-700 rounded-full overflow-hidden mt-1">
+                  <div class="w-1/3 bg-orange-400 h-full"></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-2 text-xs text-gray-400">
+              <div>1 MIN AVG<br /><span class="text-white">0</span></div>
+              <div>5 MIN AVG<br /><span class="text-white">0</span></div>
+              <div>15 MIN AVG<br /><span class="text-white">0</span></div>
+            </div>
+          </div>
+
+          <!-- IO Stats -->
+          <div class="bg-[#1b263b] p-4 rounded-xl shadow border border-gray-700 col-span-2">
+            <h3 class="text-lg font-semibold mb-4 text-orange-300">IO Stats</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-[#0d1b2a] p-3 rounded-lg border border-gray-600">
+                <p class="text-sm text-gray-400">NET IO</p>
+                <p class="text-white text-lg mt-1">-</p>
+              </div>
+              <div class="bg-[#0d1b2a] p-3 rounded-lg border border-gray-600">
+                <p class="text-sm text-gray-400">BLOCK IO</p>
+                <p class="text-white text-lg mt-1">-</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Load History -->
+          <div class="bg-[#1b263b] p-4 rounded-xl shadow border border-gray-700 col-span-2">
+            <h3 class="text-lg font-semibold mb-4 text-orange-300">Load History</h3>
+            <div class="grid grid-cols-3 gap-4 text-xs text-gray-400">
+              <div>CPU PEAK<br /><span class="text-white">-</span></div>
+              <div>PID MAX<br /><span class="text-white">-</span></div>
+              <div>MEMORY HIGH<br /><span class="text-white">-</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other content... [UNCHANGED] -->
+
+        <!-- Terminal Section -->
+        <div class="bg-black text-green-400 font-mono text-sm p-4 rounded-xl border border-gray-700">
+          <p><span class="text-green-500">●</span> Server Logs</p>
+          <div class="terminal-content mt-2" id="terminal">
+            <p>ninja@<span class="text-orange-300">V-labs</span>:~$</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    let labRunning = false;
+
+    function handleLabToggle() {
+      const btn = document.getElementById("lab-button");
+      const spinner = document.getElementById("spinner");
+      const text = document.getElementById("button-text");
+
+      spinner.classList.remove("hidden");
+      btn.disabled = true;
+
+      // Customize path to your docker-compose directory
+      const basePath = "C:\\Users\\Admin\\Music\\code\\project lab\\docker-ssh-vscode\\docker\\ubuntu"; // Replace with your real path
+      let command = `cd ${basePath} && python3 missionstart.py`;
+      let buttonText = "Stop Lab 🛑";
+      let buttonClass = "bg-red-600 hover:bg-red-700";
+
+      if (labRunning) {
+        command = `cd ${basePath} && python3 stopmission.py`;
+        buttonText = "Deploy 🚀";
+        buttonClass = "bg-green-600 hover:bg-green-700";
+      }
+
+      fetch("/execute-command", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ command: command })
+      })
+      .then(response => response.json())
+      .then(data => {
+        appendToTerminal(`ninja@V-labs:~$ ${command}`);
+        if (data.output) {
+          streamOutput(data.output);
+        } else {
+          appendToTerminal("No output received.");
+        }
+
+        labRunning = !labRunning;
+        text.textContent = buttonText;
+        btn.className = `${buttonClass} text-white px-5 py-2 rounded-full shadow flex items-center gap-2`;
+      })
+      .catch(err => {
+        appendToTerminal("Error executing command.");
+        console.error(err);
+      })
+      .finally(() => {
+        spinner.classList.add("hidden");
+        btn.disabled = false;
+      });
+    }
+
+    function streamOutput(output) {
+      const terminal = document.getElementById("terminal");
+      const lines = output.split("\n");
+      lines.forEach(line => {
+        const p = document.createElement("p");
+        p.textContent = line;
+        terminal.appendChild(p);
+      });
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function appendToTerminal(text) {
+      const terminal = document.getElementById("terminal");
+      const p = document.createElement("p");
+      p.textContent = text;
+      terminal.appendChild(p);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  </script>
+
+
+  <script>
+    function updateLabInfo(isRunning) {
+      const statusMsg = document.getElementById("lab-status-msg");
+      const details = document.getElementById("lab-details");
+  
+      if (isRunning) {
+        statusMsg.classList.remove("text-red-400");
+        statusMsg.classList.add("text-green-400");
+        statusMsg.textContent = "Lab is active and running.";
+        details.classList.remove("hidden");
+      } else {
+        statusMsg.classList.add("text-red-400");
+        statusMsg.classList.remove("text-green-400");
+        statusMsg.textContent = "Lab is not active and running.";
+        details.classList.add("hidden");
+      }
+    }
+  
+    // Call from your .then() in handleLabToggle()
+    // Add inside .then(...) after response:
+    updateLabInfo(!labRunning ? true : false);
+  
+    // LOAD AVERAGE POLLING
+    function updateLoadAvg() {
+      fetch("/loadavg")
+        .then(res => res.json())
+        .then(data => {
+          document.querySelectorAll(".grid .text-white")[0].textContent = data.one;
+          document.querySelectorAll(".grid .text-white")[1].textContent = data.five;
+          document.querySelectorAll(".grid .text-white")[2].textContent = data.fifteen;
+        })
+        .catch(console.error);
+    }
+  
+    setInterval(updateLoadAvg, 5000); // Every 5 seconds
+    updateLoadAvg(); // Run once at load
+  </script>
+  
+</body>
+</html>

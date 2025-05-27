@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  ubuntulab:
+    build: .
+    container_name: ubuntulab
+    ports:
+      - "2222:22"      # SSH Port
+      - "8080:8080"    # Code Server
+    volumes:
+      - ./mission_files:/home/vignesh/mission   # Persisted folder
+    restart: unless-stopped
+    tty: true
