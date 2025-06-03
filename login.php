@@ -1,209 +1,154 @@
+<?php
+// Include authentication functions
+require_once 'includes/auth.php';
+
+// Check if user is already logged in
+if (is_logged_in()) {
+    redirect('dashboard.php');
+}
+
+// Initialize variables
+$error_message = '';
+$username = '';
+
+// Process login form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get form data
+    $username = isset($_POST['username']) ? sanitize_input($_POST['username']) : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+    $remember = isset($_POST['remember']) ? true : false;
+    
+    // Validate inputs
+    if (empty($username)) {
+        $error_message = 'Username is required';
+    } else if (empty($password)) {
+        $error_message = 'Password is required';
+    } else {
+        // Attempt login
+        $result = user_login($username, $password);
+        
+        if ($result['success']) {
+            // Set remember-me cookie if requested
+            if ($remember) {
+                setcookie('vlab_username', $username, time() + (86400 * 30), "/"); // 30 days
+            }
+            
+            // Redirect to dashboard
+            redirect('dashboard.php');
+        } else {
+            $error_message = $result['message'];
+            
+            // Create a demo user if none exists (for testing purposes)
+            if ($username === 'demo' && $password === 'Demo1234') {
+                $demoUser = [
+                    'username' => 'demo',
+                    'password' => 'Demo1234',
+                    'fullname' => 'Demo User',
+                    'email' => 'demo@example.com'
+                ];
+                $reg_result = user_register($demoUser);
+                
+                if ($reg_result['success']) {
+                    redirect('dashboard.php');
+                }
+            }
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Lab - Virtual Labs for Everyone</title>
-    <link rel="stylesheet" href="assets/css/styles.landing.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>VLab - Login</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fas fa-flask"></i>
-                <span>V-Lab</span>
+<body class="login-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1><span class="logo-v">V</span>LAB</h1>
+                <p class="subtitle">Virtual Laboratory Environment</p>
             </div>
-            <div class="nav-menu" id="nav-menu">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#features" class="nav-link">Labs</a>
-                <a href="#how-it-works" class="nav-link">How it Works</a>
-                <a href="login.php" class="nav-link">Login</a>
-                <a href="signup.php" class="nav-link nav-cta">Sign Up</a>
-            </div>
-            <div class="nav-toggle" id="nav-toggle">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-logo">
-                    <i class="fas fa-flask"></i>
-                    <h1>V-Lab</h1>
-                </div>
-                <p class="hero-tagline">Virtual Labs for Everyone</p>
-                <p class="hero-description">Experience cutting-edge virtual laboratory environments with isolated, secure, and scalable infrastructure for your development and testing needs.</p>
-                <button class="cta-button" id="start-mission" onclick="window.location.href='login.php'">
-                    <span>Start the Mission</span>
-                    <i class="fas fa-rocket"></i>
-                </button>
-            </div>
-            <div class="hero-visual">
-                <div class="floating-elements">
-                    <div class="floating-element" data-speed="2">
-                        <i class="fab fa-docker"></i>
+            <div class="auth-form">
+                <h2>Login</h2>
+                <form id="loginForm" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+                    <?php if (!empty($error_message)): ?>
+                        <div class="form-error" style="margin-bottom: 15px; text-align: center;"><?php echo $error_message; ?></div>
+                    <?php endif; ?>
+                    
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>" required>
+                        <span class="form-error" id="usernameError"></span>
                     </div>
-                    <div class="floating-element" data-speed="3">
-                        <i class="fas fa-server"></i>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="password" name="password" required>
+                        <span class="form-error" id="passwordError"></span>
                     </div>
-                    <div class="floating-element" data-speed="1.5">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="floating-element" data-speed="2.5">
-                        <i class="fas fa-terminal"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="hero-background">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-header">
-                <h2>Why Choose V-Lab?</h2>
-                <p>Discover the power of virtual laboratory environments designed for modern development workflows</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Isolated Lab Environments</h3>
-                    <p>Secure, sandboxed environments that keep your experiments isolated from production systems while maintaining full functionality.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-icon">
-                        <i class="fab fa-docker"></i>
-                    </div>
-                    <h3>Docker-Based Labs</h3>
-                    <p>Containerized lab environments that ensure consistency, portability, and lightning-fast deployment across any infrastructure.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-icon">
-                        <i class="fas fa-plug"></i>
-                    </div>
-                    <h3>SSH & Web Access</h3>
-                    <p>Flexible access methods including secure SSH connections and intuitive web-based interfaces for seamless lab interaction.</p>
-                </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Real-Time Stats</h3>
-                    <p>Comprehensive monitoring and analytics dashboard providing real-time insights into your lab performance and resource usage.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How it Works Section -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <div class="section-header">
-                <h2>How V-Lab Works</h2>
-                <p>Get started with your virtual lab environment in just a few simple steps</p>
-            </div>
-            <div class="steps-container">
-                <div class="step" data-aos="fade-right" data-aos-delay="100">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <div class="step-icon">
-                            <i class="fas fa-user-plus"></i>
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Remember me</label>
                         </div>
-                        <h3>Create Account</h3>
-                        <p>Sign up for your V-Lab account and choose the perfect plan for your needs. Get instant access to our platform.</p>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
                     </div>
-                </div>
-                <div class="step" data-aos="fade-left" data-aos-delay="200">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <div class="step-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <h3>Configure Lab</h3>
-                        <p>Choose from pre-built templates or customize your lab environment with the tools and frameworks you need.</p>
+                    <button type="submit" class="btn-primary">LOGIN <i class="fas fa-arrow-right"></i></button>
+                    <div class="auth-redirect">
+                        Don't have an account? <a href="signup.php">Sign up</a>
                     </div>
-                </div>
-                <div class="step" data-aos="fade-right" data-aos-delay="300">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <div class="step-icon">
-                            <i class="fas fa-play"></i>
-                        </div>
-                        <h3>Launch & Connect</h3>
-                        <p>Deploy your lab with a single click and connect via SSH, web interface, or your preferred development tools.</p>
-                    </div>
-                </div>
-                <div class="step" data-aos="fade-left" data-aos-delay="400">
-                    <div class="step-number">04</div>
-                    <div class="step-content">
-                        <div class="step-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h3>Start Building</h3>
-                        <p>Begin your development, testing, or learning journey in a fully isolated and powerful virtual environment.</p>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <i class="fas fa-flask"></i>
-                        <span>V-Lab</span>
-                    </div>
-                    <p>Virtual Labs for Everyone</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-section">
-                        <h4>Product</h4>
-                        <a href="#">Features</a>
-                        <a href="#">Pricing</a>
-                        <a href="#">Documentation</a>
-                    </div>
-                    <div class="footer-section">
-                        <h4>Company</h4>
-                        <a href="#">About</a>
-                        <a href="#">Contact</a>
-                        <a href="#">Blog</a>
-                    </div>
-                    <div class="footer-section">
-                        <h4>Support</h4>
-                        <a href="#">Help Center</a>
-                        <a href="#">Community</a>
-                        <a href="#">Status</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 V-Lab. All rights reserved.</p>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
+        <div class="auth-footer">
+            <p>&copy; <?php echo date('Y'); ?> VLab - Cybersecurity Training Platform</p>
         </div>
-    </footer>
+    </div>
 
-    <script src="js/script.landing.js"></script>
+    <div class="cyber-grid">
+        <div class="grid-line horizontal"></div>
+        <div class="grid-line horizontal"></div>
+        <div class="grid-line horizontal"></div>
+        <div class="grid-line vertical"></div>
+        <div class="grid-line vertical"></div>
+        <div class="grid-line vertical"></div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Client-side validation
+        const loginForm = document.getElementById('loginForm');
+        
+        loginForm.addEventListener('submit', function(event) {
+            let isValid = true;
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            // Clear previous errors
+            document.getElementById('usernameError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            
+            // Validate username
+            if (!username) {
+                document.getElementById('usernameError').textContent = 'Username is required';
+                isValid = false;
+            }
+            
+            // Validate password
+            if (!password) {
+                document.getElementById('passwordError').textContent = 'Password is required';
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+    </script>
 </body>
 </html>
