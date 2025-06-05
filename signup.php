@@ -56,6 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($result['success']) {
             // Redirect to dashboard
+         $folderPath = "C:/xampp/htdocs/betaboy/SentinelLab/user_labs/" . $username;
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0777, true); // Ensure recursive creation if needed
+            }
+
             redirect('dashboard.php');
         } else {
             $error_message = $result['message'];
