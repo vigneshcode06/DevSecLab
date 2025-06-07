@@ -1,7 +1,9 @@
-import os
- 
-print("starting the mission")
+import os 
+mission = sys.argv[1]
 
-os.system("docker-compose down")
-
-print("mission stop done ")
+if mission == "start":
+    os.system("docker-compose up -d") 
+elif mission == "stop":
+    os.system("docker-compose stop")
+elif mission == "remove":
+    os.system("docker-compose stop")
