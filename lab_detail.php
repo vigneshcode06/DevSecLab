@@ -11,7 +11,7 @@ if (!is_logged_in()) {
 // Get lab ID from URL
 $lab_id = isset($_GET['id']) ? (int)$_GET['id'] : 1;
 
-// Lab data (in real app, this would come from database)
+
 $labs = [
     1 => [
         'title' => 'Essentials Lab',
@@ -42,8 +42,20 @@ $labs = [
         'cpu_load' => '8',
         'memory_usage' => '3',
         'network_usage' => '2'
+    ],
+        10 => [
+        'title' => 'MySQL WebBench test',
+        'description' => 'Database management and testing environment with MySQL and web interface.',
+        'icon' => 'fas fa-database',
+        'tags' => ['Beta', 'Get Learning'],
+        'status' => 'Instance Down',
+        'cpu_load' => '8',
+        'memory_usage' => '3',
+        'network_usage' => '2'
     ]
+
 ];
+
 
 $current_lab = $labs[$lab_id] ?? $labs[1];
 
@@ -140,7 +152,7 @@ $username = $_SESSION['username'];
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-primary lab-deploy-btn">
-                        Deploy #1
+                        Deploy 
                     </button>
                 </div>
             </header>
