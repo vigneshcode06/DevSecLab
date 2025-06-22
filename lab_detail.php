@@ -151,9 +151,10 @@ $username = $_SESSION['username'];
                     <span><?php echo htmlspecialchars($current_lab['title']); ?></span>
                 </div>
                 <div class="header-actions">
-                    <button class="btn btn-primary lab-deploy-btn">
-                        Deploy 
-                    </button>
+<a href="deploy_lab.php?id=<?php echo $lab_id; ?>" class="btn btn-primary lab-deploy-btn">
+    Deploy
+</a>
+
                 </div>
             </header>
 
