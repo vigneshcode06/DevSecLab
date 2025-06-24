@@ -204,7 +204,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'personal';
                                     <span class="stat-label">Labs Completed</span>
                                 </div>
                                 <div class="stat">
-                                    <span class="stat-value">1250</span>
+                                    <span class="stat-value">0</span>
                                     <span class="stat-label">CTF Points</span>
                                 </div>
                                 <div class="stat">

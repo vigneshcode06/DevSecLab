@@ -34,8 +34,8 @@ $labs = [
         'network_usage' => '1'
     ],
     3 => [
-        'title' => 'MySQL WebBench',
-        'description' => 'Database management and testing environment with MySQL and web interface.',
+        'title' => 'kali linux ',
+        'description' => 'Kali Linux Desktop that can run on your browser accelerated by Vlabs Labs with all default tools.',
         'icon' => 'fas fa-database',
         'tags' => ['Beta', 'Get Learning'],
         'status' => 'Instance Down',

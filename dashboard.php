@@ -152,7 +152,7 @@ $recent_achievements = array_slice($recent_achievements, 0, 3);
                         </div>
                         <div class="stat-info">
                             <h4>CTF Points</h4>
-                            <p>1250</p>
+                            <p>0</p>
                         </div>
                         <div class="stat-progress">
                             <div class="progress-bar" style="width: 45%"></div>

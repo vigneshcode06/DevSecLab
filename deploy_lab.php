@@ -11,7 +11,7 @@ $username = $_SESSION['username'];
 $lab_folders = [
     1 => "ubuntu",
     2 => "java_dev",
-    3 => "mysql_webbench",
+    3 => "kali_linux",
     10 => "mysql_test"
 ];
 
