@@ -16,7 +16,7 @@ $lab_folders = [
 ];
 
 $lab_folder = $lab_folders[$lab_id] ?? "ubuntu";
-$user_lab_path = "C:/xampp/htdocs/betaboy/SentinelLab/user_labs/$username/$lab_folder";
+$user_lab_path = "C:/xampp/htdocs/DevSecLab/user_labs/$username/$lab_folder";
 
 // Decide action: start or stop
 $action = $_POST['action'] ?? 'start';

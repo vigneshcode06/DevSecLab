@@ -1,26 +1,24 @@
 <?php
-// Include authentication and labs functions
+
 require_once 'includes/auth.php';
 require_once 'includes/labs.php';
 
-// Check if user is logged in
+
 if (!is_logged_in()) {
     redirect('index.php');
 }
 
-// Get user data
+
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 $fullname = $_SESSION['fullname'];
 
-// Get user progress summary
 $progress_summary = get_user_progress_summary($user_id);
 
-// Get recent labs (limit to 3)
 $recent_labs = get_user_labs($user_id);
 $recent_labs = array_slice($recent_labs, 0, 3);
 
-// Get user achievements (limit to 3)
+
 $achievements = get_user_achievements($user_id);
 $recent_achievements = array_filter($achievements, function($achievement) {
     return $achievement['unlocked'] == 1;

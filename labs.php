@@ -1,34 +1,34 @@
 <?php
-// Include authentication and labs functions
+
 require_once 'includes/auth.php';
 require_once 'includes/labs.php';
 
-// Check if user is logged in
+
 if (!is_logged_in()) {
     redirect('index.php');
 }
 
-// Get user data
+
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 $fullname = $_SESSION['fullname'];
 
-// Get filter values from GET parameters
+
 $category_filter = isset($_GET['category']) ? $_GET['category'] : 'all';
 $difficulty_filter = isset($_GET['difficulty']) ? $_GET['difficulty'] : 'all';
 $status_filter = isset($_GET['status']) ? $_GET['status'] : 'all';
 
-// Set up filter array
+
 $filters = [
     'category' => $category_filter,
     'difficulty' => $difficulty_filter,
     'status' => $status_filter
 ];
 
-// Get filtered labs with user progress
+
 $user_labs = get_user_labs($user_id, $filters);
 
-// Group labs by category
+
 $labs_by_category = [];
 foreach ($user_labs as $lab) {
     if (!isset($labs_by_category[$lab['category']])) {
