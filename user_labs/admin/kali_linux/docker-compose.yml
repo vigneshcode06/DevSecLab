@@ -1,0 +1,12 @@
+
+version: '3.8'
+services:
+  kali_lab:
+    build: .
+    container_name: admin_kali_lab
+    ports:
+      - "2223:22"
+      - "8080:8080"
+    volumes:
+      - ./mission:/home/admin/mission
+    tty: true
