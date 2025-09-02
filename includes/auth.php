@@ -51,61 +51,65 @@ function user_login($username, $password) {
  * @param array $user_data User data
  * @return array Result with success status and message
  */
+
 function user_register($user_data) {
     global $conn;
-    
-    // Sanitize input data
-    $username = sanitize_input($user_data['username']);
-    $email = sanitize_input($user_data['email']);
-    $fullname = sanitize_input($user_data['fullname']);
-    $password = $user_data['password']; // Will be hashed below
-    
-    // Check if username already exists
-    $check_stmt = $conn->prepare("SELECT user_id FROM users WHERE username = ?");
-    $check_stmt->bind_param("s", $username);
-    $check_stmt->execute();
-    $result = $check_stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        return ['success' => false, 'message' => 'Username already exists'];
-    }
-    
-    // Check if email already exists
-    $check_stmt = $conn->prepare("SELECT user_id FROM users WHERE email = ?");
-    $check_stmt->bind_param("s", $email);
-    $check_stmt->execute();
-    $result = $check_stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        return ['success' => false, 'message' => 'Email already exists'];
-    }
-    
-    // Hash password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    
-    // Insert new user
-    $stmt = $conn->prepare("INSERT INTO users (username, password, fullname, email) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $username, $hashed_password, $fullname, $email);
-    
-    if ($stmt->execute()) {
-        $user_id = $stmt->insert_id;
-        
-        // Create default user settings
-        $settings_stmt = $conn->prepare("INSERT INTO user_settings (user_id) VALUES (?)");
-        $settings_stmt->bind_param("i", $user_id);
-        $settings_stmt->execute();
-        
-        // Auto login user
-        session_regenerate_id();
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['username'] = $username;
-        $_SESSION['fullname'] = $fullname;
-        
-        return ['success' => true, 'message' => 'Registration successful'];
-    } else {
-        return ['success' => false, 'message' => 'Registration failed: ' . $conn->error];
+
+    try {
+        // Sanitize input
+        $username = sanitize_input($user_data['username']);
+        $email = sanitize_input($user_data['email']);
+        $fullname = sanitize_input($user_data['fullname']);
+        $password = $user_data['password'];
+
+        // Username check
+        $check_stmt = $conn->prepare("SELECT user_id FROM users WHERE username = ?");
+        $check_stmt->bind_param("s", $username);
+        $check_stmt->execute();
+        $result = $check_stmt->get_result();
+        if ($result && $result->num_rows > 0) {
+            return ['success' => false, 'message' => 'Username already exists'];
+        }
+
+        // Email check
+        $check_stmt = $conn->prepare("SELECT user_id FROM users WHERE email = ?");
+        $check_stmt->bind_param("s", $email);
+        $check_stmt->execute();
+        $result = $check_stmt->get_result();
+        if ($result && $result->num_rows > 0) {
+            return ['success' => false, 'message' => 'Email already exists'];
+        }
+
+        // Hash password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Insert user
+        $stmt = $conn->prepare("INSERT INTO users (username, password, fullname, email) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $username, $hashed_password, $fullname, $email);
+
+        if ($stmt->execute()) {
+            $user_id = $stmt->insert_id;
+
+            // Default user settings
+            $settings_stmt = $conn->prepare("INSERT INTO user_settings (user_id) VALUES (?)");
+            $settings_stmt->bind_param("i", $user_id);
+            $settings_stmt->execute();
+
+            // Auto login
+            session_regenerate_id(true);
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['username'] = $username;
+            $_SESSION['fullname'] = $fullname;
+
+            return ['success' => true, 'message' => 'Registration successful'];
+        } else {
+            return ['success' => false, 'message' => 'Registration failed: ' . $conn->error];
+        }
+    } catch (Exception $e) {
+        return ['success' => false, 'message' => 'Exception: ' . $e->getMessage()];
     }
 }
+
 
 /**
  * Get user profile data

@@ -27,13 +27,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } else if ($password !== $confirm_password) { $error_message = 'Passwords do not match';
   } else if (!$terms) { $error_message = 'You must accept the Terms and Conditions';
   } else {
-    $userData = ['fullname'=>$fullname,'email'=>$email,'username'=>$username,'password'=>$password];
-    $result = user_register($userData);
-    if ($result['success']) {
-      $folderPath = "C:/xampp/htdocs/DevSecLab/user_labs/" . $username;
-      if (!file_exists($folderPath)) { mkdir($folderPath, 0777, true); }
-      redirect('dashboard.php');
-    } else { $error_message = $result['message']; }
+$result = user_register($userData);
+
+if ($result && isset($result['success']) && $result['success']) {
+    $folderPath = "C:/xampp/htdocs/DevSecLab/user_labs/" . $username;
+
+    if (!file_exists($folderPath)) { mkdir($folderPath, 0777, true); }
+
+    // Call Python script to create lab folders + Dockerfiles
+    $pythonScript = "C:/xampp/htdocs/DevSecLab/scripts/create_user_lab.py";
+    $cmd = escapeshellcmd("python3 {$pythonScript} {$username}");
+    shell_exec($cmd);
+
+    redirect('dashboard.php');
+} else {
+    $error_message = $result['message'] ?? 'Unknown registration error';
+}
   }
 }
 ?>
