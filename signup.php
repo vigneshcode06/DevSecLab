@@ -36,7 +36,8 @@ if ($result && isset($result['success']) && $result['success']) {
 
     // Call Python script to create lab folders + Dockerfiles
     $pythonScript = "C:/xampp/htdocs/DevSecLab/scripts/create_user_lab.py";
-    $cmd = escapeshellcmd("python3 {$pythonScript} {$username}");
+    // $cmd = escapeshellcmd("python3 {$pythonScript} {$username}");
+        $cmd = escapeshellcmd("python3 {$pythonScript} admin");
     shell_exec($cmd);
 
     redirect('dashboard.php');
