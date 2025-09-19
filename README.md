@@ -140,5 +140,3 @@ Built with 💙 by Vignesh
 
 
 ---
-
-Let me know if you want a dark-themed badge section, screenshots, or deploy instructions too!
