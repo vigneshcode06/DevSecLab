@@ -1,9 +1,9 @@
 <?php
 // Database configuration
-$db_host = "localhost";
-$db_user = "root"; // Change this to your MySQL username
+$db_host = "";
+$db_user = ""; // Change this to your MySQL username
 $db_pass = ""; // Change this to your MySQL password
-$db_name = "vlab_db";
+$db_name = "";
 
 // Create database connection
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
