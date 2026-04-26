@@ -1,10 +1,14 @@
-# 🔐 docker-ssh-vscode-lab
+⚠️ **Note:** This repository contains **prototype-level code** and is not intended for production use. The complete, production-ready implementation is maintained in a private GitLab repository for security reasons 🔒.
 
-Welcome to **docker-ssh-vscode-lab** — a powerful, containerized lab environment built using Docker. It provides SSH and VS Code-based access for development and hacking missions, along with a wide range of pre-configured services like MySQL, MongoDB, Adminer, and more.
 
-> 💡 Ideal for CTFs, DevOps testing, backend development, and educational labs.
+# 🔐 DevSecLabs — Docker-Based Virtual Lab Environment
 
----
+Welcome to **DecSecLab** — a fully containerized virtual lab platform designed to provide isolated, on-demand development and testing environments. Built using Docker, it enables users to launch dedicated lab instances with secure SSH and VS Code access.
+
+The platform integrates essential services such as MySQL, MongoDB, Adminer, and more, allowing users to simulate real-world development, DevOps workflows, and security testing environments within a controlled setup.
+
+> 🚀 Designed for hands-on learning, backend development, DevOps practice, and cybersecurity labs.
+
 
 ## 🚀 Features
 
