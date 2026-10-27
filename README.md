@@ -1,4 +1,4 @@
-⚠️ **Note:** This repository contains **prototype-level code** and is not intended for production use. The complete, production-ready implementation is maintained in a private GitLab repository for security reasons 🔒
+⚠️ **Note:** This repository contains **prototype-level code** and is not intended for production use. The complete, production-ready implementation is maintained in a private GitLab repository for security reasons 
 
 
 # 🔐 DevSecLabs — Docker-Based Virtual Lab Environment
